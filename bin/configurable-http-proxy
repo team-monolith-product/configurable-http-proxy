@@ -12,6 +12,7 @@ var fs = require("fs"),
   cli = require("commander"),
   tls = require("tls"),
   winston = require("winston");
+  Agent = require('agentkeepalive');
 
 cli
   .version(pkg.version)
@@ -103,6 +104,30 @@ cli
   .option(
     "--storage-backend <storage-class>",
     "Define an external storage class. Defaults to in-MemoryStore."
+  )
+  .option(
+    "--agent-max-sockets <n>",
+    "Maximum number of sockets to allow per host. Default = Infinity"
+  )
+  .option(
+    "--agent-keep-alive",
+    "Keep sockets around in a pool to be used by other requests in the future. Default = true"
+  )
+  .option(
+    "--agent-keep-alive-msecs <n>",
+    "When using the keepAlive option, specifies the initial delay for TCP Keep-Alive packets. Ignored when the keepAlive option is false or undefined. Defaults to 1000."
+  )
+  .option(
+    "--agent-max-free-sockets <n>",
+    "Maximum number of sockets (per host) to leave open in a free state. Only relevant if keepAlive is set to true. Default = 256"
+  )
+  .option(
+    "--agent-timeout <n>",
+    "Sets the working socket to timeout after timeout milliseconds of inactivity on the working socket. Default is freeSocketTimeout * 2 so long as that value is greater than or equal to 8 seconds, otherwise the default is 8 seconds."
+  )
+  .option(
+    "--agent-free-socket-timeout <n>",
+    "Sets the free socket to timeout after freeSocketTimeout milliseconds of inactivity on the free socket. The default server-side timeout is 5000 milliseconds, to avoid ECONNRESET exceptions, we set the default value to 4000 milliseconds. Only relevant if keepAlive is set to true"
   );
 
 // collects multiple flags to an object
@@ -309,6 +334,17 @@ if (!options.authToken) {
 
 // external backend class
 options.storageBackend = args.storageBackend;
+
+if (args.agentKeepAlive) {
+  options.agent = new Agent({
+    keepAlive: true,
+    keepAliveMsecs: args.agentKeepAliveMsecs,
+    maxSockets: args.agentMaxSockets,
+    maxFreeSockets: args.agentMaxFreeSockets,
+    timeout: args.agentTimeout,
+    freeSocketTimeout: args.agentFreeSocketTimeout
+  });
+}
 
 var proxy = new ConfigurableProxy(options);
 
