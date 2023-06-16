@@ -106,32 +106,8 @@ cli
     "Define an external storage class. Defaults to in-MemoryStore."
   )
   .option(
-    "--agent-max-sockets <n>",
-    "Maximum number of sockets to allow per host. Default = Infinity",
-    parseInt
-  )
-  .option(
-    "--agent-keep-alive",
-    "Keep sockets around in a pool to be used by other requests in the future. Default = true"
-  )
-  .option(
-    "--agent-keep-alive-msecs <n>",
-    "When using the keepAlive option, specifies the initial delay for TCP Keep-Alive packets. Ignored when the keepAlive option is false or undefined. Defaults to 1000.",
-    parseInt
-  )
-  .option(
-    "--agent-max-free-sockets <n>",
-    "Maximum number of sockets (per host) to leave open in a free state. Only relevant if keepAlive is set to true. Default = 256",
-    parseInt
-  )
-  .option(
-    "--agent-timeout <n>",
-    "Sets the working socket to timeout after timeout milliseconds of inactivity on the working socket. Default is freeSocketTimeout * 2 so long as that value is greater than or equal to 8 seconds, otherwise the default is 8 seconds.",
-    parseInt
-  )
-  .option(
-    "--agent-free-socket-timeout <n>",
-    "Sets the free socket to timeout after freeSocketTimeout milliseconds of inactivity on the free socket. The default server-side timeout is 5000 milliseconds, to avoid ECONNRESET exceptions, we set the default value to 4000 milliseconds. Only relevant if keepAlive is set to true",
+    "--server-keep-alive-timeout <n>",
+    "The number of milliseconds of inactivity a server needs to wait for additional incoming data, after it has finished writing the last response, before a socket will be destroyed. Default: 5000",
     parseInt
   );
 
@@ -340,17 +316,6 @@ if (!options.authToken) {
 // external backend class
 options.storageBackend = args.storageBackend;
 
-if (args.agentKeepAlive) {
-  options.agent = new Agent({
-    keepAlive: true,
-    keepAliveMsecs: args.agentKeepAliveMsecs,
-    maxSockets: args.agentMaxSockets,
-    maxFreeSockets: args.agentMaxFreeSockets,
-    timeout: args.agentTimeout,
-    freeSocketTimeout: args.agentFreeSocketTimeout
-  });
-}
-
 var proxy = new ConfigurableProxy(options);
 
 var listen = {};
@@ -369,6 +334,12 @@ listen.metricsIp = args.metricsIp;
 listen.metricsPort = args.metricsPort;
 
 proxy.proxyServer.listen(listen.port, listen.ip);
+
+if (args.serverKeepAliveTimeout) {
+  proxy.proxyServer.keepAliveTimeout = args.serverKeepAliveTimeout;
+  proxy.proxyServer.headersTimeout = args.serverKeepAliveTimeout + 1000;
+}
+
 proxy.apiServer.listen(listen.apiPort, listen.apiIp);
 if (listen.metricsPort) {
   proxy.metricsServer.listen(listen.metricsPort, listen.metricsIp);
