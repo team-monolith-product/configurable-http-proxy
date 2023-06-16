@@ -11,7 +11,7 @@ var fs = require("fs"),
   pkg = require("../package.json"),
   cli = require("commander"),
   tls = require("tls"),
-  winston = require("winston");
+  winston = require("winston"),
   Agent = require('agentkeepalive');
 
 cli
