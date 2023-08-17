@@ -17,11 +17,7 @@ var fs = require("fs"),
 cli
   .version(pkg.version)
   .option("--ip <ip-address>", "Public-facing IP of the proxy")
-  .option(
-    "--port <n> (defaults to 8000)",
-    "Public-facing port of the proxy",
-    parseInt
-  )
+  .option("--port <n> (defaults to 8000)", "Public-facing port of the proxy", parseInt)
   .option("--ssl-key <keyfile>", "SSL key to use, if any")
   .option("--ssl-cert <certfile>", "SSL certificate to use, if any")
   .option("--ssl-ca <ca-file>", "SSL certificate authority, if any")
@@ -30,19 +26,10 @@ cli
     "--ssl-reject-unauthorized",
     "Reject unauthorized SSL connections (only meaningful if --ssl-request-cert is given)"
   )
-  .option(
-    "--ssl-protocol <ssl-protocol>",
-    "Set specific SSL protocol, e.g. TLSv1_2, SSLv3"
-  )
-  .option(
-    "--ssl-ciphers <ciphers>",
-    "`:`-separated ssl cipher list. Default excludes RC4"
-  )
+  .option("--ssl-protocol <ssl-protocol>", "Set specific SSL protocol, e.g. TLSv1_2, SSLv3")
+  .option("--ssl-ciphers <ciphers>", "`:`-separated ssl cipher list. Default excludes RC4")
   .option("--ssl-allow-rc4", "Allow RC4 cipher for SSL (disabled by default)")
-  .option(
-    "--ssl-dhparam <dhparam-file>",
-    "SSL Diffie-Helman Parameters pem file, if any"
-  )
+  .option("--ssl-dhparam <dhparam-file>", "SSL Diffie-Helman Parameters pem file, if any")
   .option("--api-ip <ip>", "Inward-facing IP for API requests", "localhost")
   .option(
     "--api-port <n>",
@@ -50,26 +37,14 @@ cli
     parseInt
   )
   .option("--api-ssl-key <keyfile>", "SSL key to use, if any, for API requests")
-  .option(
-    "--api-ssl-cert <certfile>",
-    "SSL certificate to use, if any, for API requests"
-  )
-  .option(
-    "--api-ssl-ca <ca-file>",
-    "SSL certificate authority, if any, for API requests"
-  )
-  .option(
-    "--api-ssl-request-cert",
-    "Request SSL certs to authenticate clients for API requests"
-  )
+  .option("--api-ssl-cert <certfile>", "SSL certificate to use, if any, for API requests")
+  .option("--api-ssl-ca <ca-file>", "SSL certificate authority, if any, for API requests")
+  .option("--api-ssl-request-cert", "Request SSL certs to authenticate clients for API requests")
   .option(
     "--api-ssl-reject-unauthorized",
     "Reject unauthorized SSL connections (only meaningful if --api-ssl-request-cert is given)"
   )
-  .option(
-    "--client-ssl-key <keyfile>",
-    "SSL key to use, if any, for proxy to client requests"
-  )
+  .option("--client-ssl-key <keyfile>", "SSL key to use, if any, for proxy to client requests")
   .option(
     "--client-ssl-cert <certfile>",
     "SSL certificate to use, if any, for proxy to client requests"
@@ -78,56 +53,29 @@ cli
     "--client-ssl-ca <ca-file>",
     "SSL certificate authority, if any, for proxy to client requests"
   )
-  .option(
-    "--client-ssl-request-cert",
-    "Request SSL certs to authenticate clients for API requests"
-  )
+  .option("--client-ssl-request-cert", "Request SSL certs to authenticate clients for API requests")
   .option(
     "--client-ssl-reject-unauthorized",
     "Reject unauthorized SSL connections (only meaningful if --client-ssl-request-cert is given)"
   )
-  .option(
-    "--default-target <host>",
-    "Default proxy target (proto://host[:port])"
-  )
+  .option("--default-target <host>", "Default proxy target (proto://host[:port])")
   .option(
     "--error-target <host>",
     "Alternate server for handling proxy errors (proto://host[:port])"
   )
-  .option(
-    "--error-path <path>",
-    "Alternate server for handling proxy errors (proto://host[:port])"
-  )
+  .option("--error-path <path>", "Alternate server for handling proxy errors (proto://host[:port])")
   .option(
     "--redirect-port <redirect-port>",
     "Redirect HTTP requests on this port to the server on HTTPS"
   )
-  .option(
-    "--redirect-to <port>",
-    "Redirect HTTP requests from --redirect-port to this port"
-  )
+  .option("--redirect-to <port>", "Redirect HTTP requests from --redirect-port to this port")
   .option("--pid-file <pid-file>", "Write our PID to a file")
   // passthrough http-proxy options
-  .option(
-    "--no-x-forward",
-    "Don't add 'X-forward-' headers to proxied requests"
-  )
-  .option(
-    "--no-prepend-path",
-    "Avoid prepending target paths to proxied requests"
-  )
-  .option(
-    "--no-include-prefix",
-    "Don't include the routing prefix in proxied requests"
-  )
-  .option(
-    "--auto-rewrite",
-    "Rewrite the Location header host/port in redirect responses"
-  )
-  .option(
-    "--change-origin",
-    "Changes the origin of the host header to the target URL"
-  )
+  .option("--no-x-forward", "Don't add 'X-forward-' headers to proxied requests")
+  .option("--no-prepend-path", "Avoid prepending target paths to proxied requests")
+  .option("--no-include-prefix", "Don't include the routing prefix in proxied requests")
+  .option("--auto-rewrite", "Rewrite the Location header host/port in redirect responses")
+  .option("--change-origin", "Changes the origin of the host header to the target URL")
   .option(
     "--protocol-rewrite <proto>",
     "Rewrite the Location header protocol in redirect responses to the specified protocol"
@@ -141,15 +89,8 @@ cli
   .option("--insecure", "Disable SSL cert verification")
   .option("--host-routing", "Use host routing (host as first level of path)")
   .option("--metrics-ip <ip>", "IP for metrics server", "")
-  .option(
-    "--metrics-port <n>",
-    "Port of metrics server. Defaults to no metrics server"
-  )
-  .option(
-    "--log-level <loglevel>",
-    "Log level (debug, info, warn, error)",
-    "info"
-  )
+  .option("--metrics-port <n>", "Port of metrics server. Defaults to no metrics server")
+  .option("--log-level <loglevel>", "Log level (debug, info, warn, error)", "info")
   .option(
     "--timeout <n>",
     "Timeout (in millis) when proxy drops connection for a request.",
@@ -163,7 +104,7 @@ cli
   .option(
     "--storage-backend <storage-class>",
     "Define an external storage class. Defaults to in-MemoryStore."
-  )
+  ) 
   .option(
     "--server-keep-alive-timeout <n>",
     "The number of milliseconds of inactivity a server needs to wait for additional incoming data, after it has finished writing the last response, before a socket will be destroyed. Default: 5000",
@@ -196,9 +137,7 @@ var args = cli.opts();
 
 var ConfigurableProxy = require("../lib/configproxy.js").ConfigurableProxy;
 
-var log = require("../lib/log.js").defaultLogger({
-  level: args.logLevel.toLowerCase(),
-});
+var log = require("../lib/log.js").defaultLogger({ level: args.logLevel.toLowerCase() });
 var options = { log: log };
 
 var sslCiphers;
@@ -286,8 +225,7 @@ if (args.apiSslKey || args.apiSslCert) {
   if (args.apiSslKey) {
     options.apiSsl.key = fs.readFileSync(args.apiSslKey);
     if (process.env.CONFIGPROXY_API_SSL_KEY_PASSPHRASE) {
-      options.apiSsl.passphrase =
-        process.env.CONFIGPROXY_API_SSL_KEY_PASSPHRASE;
+      options.apiSsl.passphrase = process.env.CONFIGPROXY_API_SSL_KEY_PASSPHRASE;
     }
   }
   if (args.apiSslCert) {
@@ -406,13 +344,12 @@ listen.apiPort = args.apiPort || listen.port + 1;
 listen.metricsIp = args.metricsIp;
 listen.metricsPort = args.metricsPort;
 
-proxy.proxyServer.listen(listen.port, listen.ip);
-
 if (args.serverKeepAliveTimeout) {
   proxy.proxyServer.keepAliveTimeout = args.serverKeepAliveTimeout;
   proxy.proxyServer.headersTimeout = args.serverKeepAliveTimeout + 1000;
 }
 
+proxy.proxyServer.listen(listen.port, listen.ip);
 proxy.apiServer.listen(listen.apiPort, listen.apiIp);
 if (listen.metricsPort) {
   proxy.metricsServer.listen(listen.metricsPort, listen.metricsIp);
@@ -432,12 +369,7 @@ log.info(
   listen.apiPort
 );
 if (listen.metricsPort) {
-  log.info(
-    "Serve metrics at %s://%s:%s/metrics",
-    "http",
-    listen.metricsIp,
-    listen.metricsPort
-  );
+  log.info("Serve metrics at %s://%s:%s/metrics", "http", listen.metricsIp, listen.metricsPort);
 }
 
 if (args.pidFile) {
@@ -479,10 +411,7 @@ if (options.redirectPort && listen.port !== 80) {
     })
     .listen(options.redirectPort, () => {
       log.info(
-        "Added HTTP to HTTPS redirection from " +
-          server.address().port +
-          " to " +
-          redirectPort
+        "Added HTTP to HTTPS redirection from " + server.address().port + " to " + redirectPort
       );
     });
 }
